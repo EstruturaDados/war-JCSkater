@@ -1,50 +1,40 @@
 #include <stdio.h>
 #include <string.h>
 
-#define QTD_TERRITORIOS 5
-#define TAM_NOME 50
-#define TAM_COR 20
+struct Territorio {
+    char nome[30];
+    char cor[10];
+    int tropas;
+};
 
-typedef struct {
-    char nome[TAM_NOME];
-    char corExercito[TAM_COR];
-    int numTropas;
-} Territorio;
-
-void removerNovaLinha(char *str) {
-    size_t len = strlen(str);
-    if (len > 0 && str[len-1] == '\n') {
-        str[len-1] = '\0';
-    }
+void limparBufferEntrada() {
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF);
 }
 
 int main() {
-    Territorio territorios[QTD_TERRITORIOS];
+    struct Territorio territorios[5];
+int i;          
+    for (i = 0; i < 5; i++) {
+        printf("Digite o nome do território %d: ", i + 1);
+        fgets(territorios[i].nome, sizeof(territorios[i].nome), stdin);
+        territorios[i].nome[strcspn(territorios[i].nome, "\n")] = '\0'; // Remove o '\n' do final da string
 
-    printf("Cadastro dos Territórios:\n");
-    for (int i = 0; i < QTD_TERRITORIOS; i++) {
-        printf("\n Cadastrando Território %d:\n", i+1);
+        printf("Digite a cor do território %d: ", i + 1);
+        fgets(territorios[i].cor, sizeof(territorios[i].cor), stdin);
+        territorios[i].cor[strcspn(territorios[i].cor, "\n")] = '\0'; // Remove o '\n' do final da string
 
-        printf("Nome do Território: ");
-        fgets(territorios[i].nome, TAM_NOME, stdin);
-        removerNovaLinha(territorios[i].nome);
-
-        printf("Cor do Exército: ");
-        fgets(territorios[i].corExercito, TAM_COR, stdin);
-        removerNovaLinha(territorios[i].corExercito);
-
-        printf("Número de Tropas: ");
-        scanf("%d", &territorios[i].numTropas);
-        getchar(); // Limpa o '\n' deixado pelo scanf
+        printf("Digite o número de tropas no território %d: ", i + 1);
+        scanf("%d", &territorios[i].tropas);
+        limparBufferEntrada(); // Limpa o buffer de entrada após ler o número
     }
 
-    printf("\n=== Estado Atual do Mapa ===\n");
-    for (int i = 0; i < QTD_TERRITORIOS; i++) {
-        printf("Território %d:\n", i+1);
-        printf("  Nome: %s\n", territorios[i].nome);
-        printf("  Dominado por: %s\n", territorios[i].corExercito);
-        printf("  Tropas: %d\n", territorios[i].numTropas);
-        printf("-----------------------------\n");
+    printf("\nTerritórios cadastrados:\n");
+    for (i = 0; i < 5; i++) {
+        printf("Território %d:\n", i + 1);
+        printf("Nome: %s\n", territorios[i].nome);
+        printf("Cor: %s\n", territorios[i].cor);
+        printf("Tropas: %d\n", territorios[i].tropas);
     }
 
     return 0;
